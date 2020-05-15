@@ -9,6 +9,7 @@ X-Paginate = true;
 Para controlar a paginação você pode enviar os seguintes parametros na URL da sua requisição
 
 limit=X (Esse parametro define o limite de registros da paginação)
+
 page=X (Esse parametro informa qual a pagina da paginação deve ser retornada)
 
 Exemplo
