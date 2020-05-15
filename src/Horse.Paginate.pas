@@ -34,6 +34,7 @@ begin
   finally
     if Req.Headers['X-Paginate'] = 'true' then
     begin
+      x := 1;
       if not Req.Query.TryGetValue('limit', LLimit) then LLimit := '25';
       if not Req.Query.TryGetValue('page', Page) then Page := '1';
       LWebResponse := THorseHackResponse(Res).GetWebResponse;
@@ -42,8 +43,9 @@ begin
       begin
           aJsonArray := TJSONValue(LContent) as TJSONArray;
           Pages := Trunc((aJsonArray.Count / LLimit.ToInteger) + 1);
+          if Pages = 1 then x := 0;
           NewJsonArray := TJSONArray.Create;
-          for I := (LLimit.ToInteger * (Page.ToInteger-1)) to ((LLimit.ToInteger * Page.ToInteger) + LLimit.ToInteger) -2 do
+          for I := (LLimit.ToInteger * (Page.ToInteger-1)) to ((LLimit.ToInteger * Page.ToInteger)) -1 do
           begin
             if I < aJsonArray.Count then
               NewJsonArray.AddElement(aJsonArray.Items[I]);
