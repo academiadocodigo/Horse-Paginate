@@ -6,6 +6,7 @@
 	"mainsrc": "./",
 	"projects": [],
 	"dependencies": {
+		"https://github.com/bittencourtthulio/horse-paginate": ">0.0.0",
 		"https://github.com/hashload/horse": "^1.7.3",
 		"https://github.com/hashload/jhonson": "^1.0.4",
 		"https://github.com/viniciussanchez/dataset-serialize": "^v2.0.8"

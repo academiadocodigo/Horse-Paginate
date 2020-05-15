@@ -10,6 +10,14 @@
 			"failed": false,
 			"changed": true
 		},
+		"https://github.com/bittencourtthulio/horse-paginate": {
+			"name": "horse-paginate",
+			"version": "master",
+			"hash": "c72d5272156fc97bc4db8051cb2cd4a8",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
 		"https://github.com/hashload/horse": {
 			"name": "horse",
 			"version": "1.7.3",
