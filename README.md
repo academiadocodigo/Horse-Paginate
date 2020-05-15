@@ -1,10 +1,6 @@
 # Horse-Paginate
 Middleware para Servidor Horse para Paginação de Dados JSON
 
-CLIQUE NA IMAGEM ABAIXO PARA ASSISTIR O VIDEO DE DEMONSTRAÇÃO
-
-[![Assistir o Vídeo](https://img.youtube.com/vi/3sx5resW8qM/maxresdefault.jpg)](https://www.youtube.com/watch?v=3sx5resW8qM)
-
 Sample Horse Server
 ```delphi
 
