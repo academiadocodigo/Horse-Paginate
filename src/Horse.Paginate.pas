@@ -14,6 +14,8 @@ function Paginate : THorseCallback; overload;
 
 implementation
 
+uses System.Generics.Collections;
+
 function Paginate : THorseCallback; overload;
 begin
   Result := Middleware;
@@ -25,7 +27,7 @@ var
   LContent: TObject;
   aJsonArray, NewJsonArray : TJsonArray;
   LLimit : String;
-  i, x  : Integer;
+  i: Integer;
   Pages : Double;
   Page : String;
 begin
@@ -34,7 +36,6 @@ begin
   finally
     if Req.Headers['X-Paginate'] = 'true' then
     begin
-      x := 1;
       if not Req.Query.TryGetValue('limit', LLimit) then LLimit := '25';
       if not Req.Query.TryGetValue('page', Page) then Page := '1';
       LWebResponse := THorseHackResponse(Res).GetWebResponse;
@@ -43,7 +44,6 @@ begin
       begin
           aJsonArray := TJSONValue(LContent) as TJSONArray;
           Pages := Trunc((aJsonArray.Count / LLimit.ToInteger) + 1);
-          if Pages = 1 then x := 0;
           NewJsonArray := TJSONArray.Create;
           for I := (LLimit.ToInteger * (Page.ToInteger-1)) to ((LLimit.ToInteger * Page.ToInteger)) -1 do
           begin
