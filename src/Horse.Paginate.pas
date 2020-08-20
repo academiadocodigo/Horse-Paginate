@@ -10,13 +10,13 @@ uses
   Web.HTTPApp;
 
 procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: TProc);
-function Paginate : THorseCallback; overload;
+function Paginate: THorseCallback; overload;
 
 implementation
 
 uses System.Generics.Collections;
 
-function Paginate : THorseCallback; overload;
+function Paginate: THorseCallback; overload;
 begin
   Result := Middleware;
 end;
@@ -25,47 +25,51 @@ procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: TProc); over
 var
   LWebResponse: TWebResponse;
   LContent: TObject;
-  aJsonArray, NewJsonArray : TJsonArray;
-  LLimit : String;
+  LJsonArray, LNewJsonArray: TJsonArray;
+  LJsonObjectResponse: TJsonObject;
+  LLimit: String;
   i: Integer;
-  Pages : Double;
-  Page : String;
+  LPages: Double;
+  LPage: String;
 begin
   try
     Next;
   finally
     if Req.Headers['X-Paginate'] = 'true' then
     begin
-      if not Req.Query.TryGetValue('limit', LLimit) then LLimit := '25';
-      if not Req.Query.TryGetValue('page', Page) then Page := '1';
+      if not Req.Query.TryGetValue('limit', LLimit) then
+        LLimit := '25';
+      if not Req.Query.TryGetValue('page', LPage) then
+        LPage := '1';
       LWebResponse := THorseHackResponse(Res).GetWebResponse;
       LContent := THorseHackResponse(Res).GetContent;
       if Assigned(LContent) and LContent.InheritsFrom(TJSONValue) then
       begin
-          aJsonArray := TJSONValue(LContent) as TJSONArray;
-          Pages := Trunc((aJsonArray.Count / LLimit.ToInteger) + 1);
-          NewJsonArray := TJSONArray.Create;
-          for I := (LLimit.ToInteger * (Page.ToInteger-1)) to ((LLimit.ToInteger * Page.ToInteger)) -1 do
-          begin
-            if I < aJsonArray.Count then
-              NewJsonArray.AddElement(aJsonArray.Items[I]);
-          end;
-          LWebResponse.Content :=
-            TJsonObject.Create
-              .AddPair(
-                'docs',
-                NewJsonArray
-              )
-              .AddPair(TJsonPair.Create(TJSONString.Create('total'), TJSONNumber.Create(aJsonArray.Count)))
-              .AddPair(TJsonPair.Create(TJSONString.Create('limit'), TJSONNumber.Create(LLimit.ToInteger)))
-              .AddPair(TJsonPair.Create(TJSONString.Create('page'), TJSONNumber.Create(Page.ToInteger)))
-              .AddPair(TJsonPair.Create(TJSONString.Create('pages'), TJSONNumber.Create(Pages)))
-              .ToJSON;
-            LWebResponse.ContentType := 'application/json';
+        LJsonArray := TJSONValue(LContent) as TJsonArray;
+        LPages := Trunc((LJsonArray.Count / LLimit.ToInteger) + 1);
+        LNewJsonArray := TJsonArray.Create;
+        for i := (LLimit.ToInteger * (LPage.ToInteger - 1)) to ((LLimit.ToInteger * LPage.ToInteger)) - 1 do
+        begin
+          if i < LJsonArray.Count then
+            LNewJsonArray.AddElement(LJsonArray.Items[i].Clone as TJsonValue);
+        end;
+        LJsonObjectResponse := TJsonObject.Create;
+        try
+        LJsonObjectResponse
+          .AddPair('docs', LNewJsonArray)
+          .AddPair(TJsonPair.Create(TJSONString.Create('total'), TJSONNumber.Create(LJsonArray.Count)))
+          .AddPair(TJsonPair.Create(TJSONString.Create('limit'), TJSONNumber.Create(LLimit.ToInteger)))
+          .AddPair(TJsonPair.Create(TJSONString.Create('page'), TJSONNumber.Create(LPage.ToInteger)))
+          .AddPair(TJsonPair.Create(TJSONString.Create('pages'), TJSONNumber.Create(LPages)));
+
+          LWebResponse.Content := LJsonObjectResponse.ToJSON;
+        finally
+          LJsonObjectResponse.Free;
+        end;
+        LWebResponse.ContentType := 'application/json';
       end;
     end;
   end;
 end;
 
 end.
-
