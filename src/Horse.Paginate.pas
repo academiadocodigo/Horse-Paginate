@@ -54,18 +54,15 @@ begin
             LNewJsonArray.AddElement(LJsonArray.Items[i].Clone as TJsonValue);
         end;
         LJsonObjectResponse := TJsonObject.Create;
-        try
         LJsonObjectResponse
           .AddPair('docs', LNewJsonArray)
           .AddPair(TJsonPair.Create(TJSONString.Create('total'), TJSONNumber.Create(LJsonArray.Count)))
           .AddPair(TJsonPair.Create(TJSONString.Create('limit'), TJSONNumber.Create(LLimit.ToInteger)))
           .AddPair(TJsonPair.Create(TJSONString.Create('page'), TJSONNumber.Create(LPage.ToInteger)))
           .AddPair(TJsonPair.Create(TJSONString.Create('pages'), TJSONNumber.Create(LPages)));
-
+          FreeAndNil(LContent);
           LWebResponse.Content := LJsonObjectResponse.ToJSON;
-        finally
-          LJsonObjectResponse.Free;
-        end;
+          Res.Send<TJsonValue>(LJsonObjectResponse);
         LWebResponse.ContentType := 'application/json';
       end;
     end;
