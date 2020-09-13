@@ -29,13 +29,9 @@ uses
   DBClient,
   DataSet.Serialize;
 
-var
-  App: THorse;
-
 begin
-  App := THorse.Create(9000);
-  App.Use(Paginate);
-  App.Use(Jhonson);
+  THorse.Use(Paginate);
+  THorse.Use(Jhonson);
 
   App.Get('/ping',
   procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
@@ -52,6 +48,6 @@ begin
 
   end);
 
-  App.Start;
+  THorse.Listen(9000);
 end.
 ```
