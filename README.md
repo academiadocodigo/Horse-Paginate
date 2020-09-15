@@ -33,7 +33,7 @@ begin
   THorse.Use(Paginate);
   THorse.Use(Jhonson);
 
-  App.Get('/ping',
+  THorse.Get('/ping',
   procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
   var
     DataSet : TClientDataSet;
