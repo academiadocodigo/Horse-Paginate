@@ -45,25 +45,28 @@ begin
       LContent := THorseHackResponse(Res).GetContent;
       if Assigned(LContent) and LContent.InheritsFrom(TJSONValue) then
       begin
-        LJsonArray := TJSONValue(LContent) as TJsonArray;
-        LPages := Trunc((LJsonArray.Count / LLimit.ToInteger) + 1);
-        LNewJsonArray := TJsonArray.Create;
-        for i := (LLimit.ToInteger * (LPage.ToInteger - 1)) to ((LLimit.ToInteger * LPage.ToInteger)) - 1 do
-        begin
-          if i < LJsonArray.Count then
-            LNewJsonArray.AddElement(LJsonArray.Items[i].Clone as TJsonValue);
+        try
+          LJsonArray := TJSONValue(LContent) as TJsonArray;
+          LPages := Trunc((LJsonArray.Count / LLimit.ToInteger) + 1);
+          LNewJsonArray := TJsonArray.Create;
+          for i := (LLimit.ToInteger * (LPage.ToInteger - 1)) to ((LLimit.ToInteger * LPage.ToInteger)) - 1 do
+          begin
+            if i < LJsonArray.Count then
+              LNewJsonArray.AddElement(LJsonArray.Items[i].Clone as TJsonValue);
+          end;
+          LJsonObjectResponse := TJsonObject.Create;
+          LJsonObjectResponse
+            .AddPair('docs', LNewJsonArray)
+            .AddPair(TJsonPair.Create(TJSONString.Create('total'), TJSONNumber.Create(LJsonArray.Count)))
+            .AddPair(TJsonPair.Create(TJSONString.Create('limit'), TJSONNumber.Create(LLimit.ToInteger)))
+            .AddPair(TJsonPair.Create(TJSONString.Create('page'), TJSONNumber.Create(LPage.ToInteger)))
+            .AddPair(TJsonPair.Create(TJSONString.Create('pages'), TJSONNumber.Create(LPages)));
+            FreeAndNil(LContent);
+            LWebResponse.Content := LJsonObjectResponse.ToJSON;
+            Res.Send<TJsonValue>(LJsonObjectResponse);
+          LWebResponse.ContentType := 'application/json';
+        except
         end;
-        LJsonObjectResponse := TJsonObject.Create;
-        LJsonObjectResponse
-          .AddPair('docs', LNewJsonArray)
-          .AddPair(TJsonPair.Create(TJSONString.Create('total'), TJSONNumber.Create(LJsonArray.Count)))
-          .AddPair(TJsonPair.Create(TJSONString.Create('limit'), TJSONNumber.Create(LLimit.ToInteger)))
-          .AddPair(TJsonPair.Create(TJSONString.Create('page'), TJSONNumber.Create(LPage.ToInteger)))
-          .AddPair(TJsonPair.Create(TJSONString.Create('pages'), TJSONNumber.Create(LPages)));
-          FreeAndNil(LContent);
-          LWebResponse.Content := LJsonObjectResponse.ToJSON;
-          Res.Send<TJsonValue>(LJsonObjectResponse);
-        LWebResponse.ContentType := 'application/json';
       end;
     end;
   end;
