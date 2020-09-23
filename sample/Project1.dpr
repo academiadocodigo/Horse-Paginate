@@ -13,28 +13,24 @@ uses
   DBClient,
   DataSet.Serialize;
 
-var
-  App: THorse;
-
 begin
-  App := THorse.Create(9000);
-  App.Use(Paginate);
-  App.Use(Jhonson);
+  THorse
+    .Use(Paginate)
+    .Use(Jhonson);
 
-  App.Get('/ping',
-  procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
-  var
-    DataSet : TClientDataSet;
-  begin
-    DataSet := TClientDataSet.Create(nil);
-    try
-      DataSet.LoadFromFile('items.xml');
-      Res.Send<TJsonArray>(DataSet.ToJsonArray);
-    finally
-      DataSet.Free;
-    end;
+  THorse.Get('/ping',
+    procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
+    var
+      DataSet: TClientDataSet;
+    begin
+      DataSet := TClientDataSet.Create(nil);
+      try
+        DataSet.LoadFromFile('items.xml');
+        Res.Send<TJsonArray>(DataSet.ToJsonArray);
+      finally
+        DataSet.Free;
+      end;
+    end);
 
-  end);
-
-  App.Start;
+  THorse.Listen(9000);
 end.

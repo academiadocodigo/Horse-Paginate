@@ -23,11 +23,6 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Linux64' and '$(Base)'=='true') or '$(Base_Linux64)'!=''">
-        <Base_Linux64>true</Base_Linux64>
-        <CfgParent>Base</CfgParent>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
         <Base_Win32>true</Base_Win32>
         <CfgParent>Base</CfgParent>
@@ -64,7 +59,7 @@
         <DCC_K>false</DCC_K>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <SanitizedProjectName>Project1</SanitizedProjectName>
-        <DCC_UnitSearchPath>modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\samples\src;modules\dataset-serialize\src\core;modules\dataset-serialize\src\helpers;modules\dataset-serialize\src\providers;modules\dataset-serialize\src\singletons;modules\dataset-serialize\src\types;modules\horse\src;modules\horse-paginate\src;modules\jhonson\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\samples\basic\src;modules\dataset-serialize\samples\configuration\src;modules\dataset-serialize\samples\master-detail\src;modules\dataset-serialize\src\core;modules\dataset-serialize\src\helpers;modules\dataset-serialize\src\providers;modules\dataset-serialize\src\singletons;modules\dataset-serialize\src\types;modules\horse\src;modules\jhonson\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;emsclientfiredac;tethering;DataSnapFireDAC;bindcompfmx;fmx;FireDACIBDriver;FireDACDBXDriver;dbexpress;IndyCore;dsnap;emsclient;DataSnapCommon;FireDACCommon;RESTBackendComponents;soapserver;bindengine;CloudService;FireDACCommonDriver;DataSnapClient;inet;IndyIPCommon;bindcompdbx;IndyIPServer;IndySystem;fmxFireDAC;FireDAC;FireDACSqliteDriver;MaterialDesign;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;DataSnapNativeClient;FireDACDSDriver;rtl;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;GridSystem;dbxcds;dsnapxml;DataSnapProviderClient;dbrtl;IndyProtocols;$(DCC_UsePackage)</DCC_UsePackage>
@@ -102,9 +97,6 @@
         <Android_NotificationIcon96>$(BDS)\bin\Artwork\Android\FM_NotificationIcon_96x96.png</Android_NotificationIcon96>
         <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;com-google-android-gms.play-services-ads-base.17.2.0.dex.jar;com-google-android-gms.play-services-ads-identifier.16.0.0.dex.jar;com-google-android-gms.play-services-ads-lite.17.2.0.dex.jar;com-google-android-gms.play-services-ads.17.2.0.dex.jar;com-google-android-gms.play-services-analytics-impl.16.0.8.dex.jar;com-google-android-gms.play-services-analytics.16.0.8.dex.jar;com-google-android-gms.play-services-base.16.0.1.dex.jar;com-google-android-gms.play-services-basement.16.2.0.dex.jar;com-google-android-gms.play-services-gass.17.2.0.dex.jar;com-google-android-gms.play-services-identity.16.0.0.dex.jar;com-google-android-gms.play-services-maps.16.1.0.dex.jar;com-google-android-gms.play-services-measurement-base.16.4.0.dex.jar;com-google-android-gms.play-services-measurement-sdk-api.16.4.0.dex.jar;com-google-android-gms.play-services-stats.16.0.1.dex.jar;com-google-android-gms.play-services-tagmanager-v4-impl.16.0.8.dex.jar;com-google-android-gms.play-services-tasks.16.0.1.dex.jar;com-google-android-gms.play-services-wallet.16.0.1.dex.jar;com-google-firebase.firebase-analytics.16.4.0.dex.jar;com-google-firebase.firebase-common.16.1.0.dex.jar;com-google-firebase.firebase-iid-interop.16.0.1.dex.jar;com-google-firebase.firebase-iid.17.1.1.dex.jar;com-google-firebase.firebase-measurement-connector.17.0.1.dex.jar;com-google-firebase.firebase-messaging.17.5.0.dex.jar;fmx.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar</EnabledSysJars>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_Linux64)'!=''">
-        <DCC_UsePackage>RESTComponents;emsclientfiredac;DataSnapFireDAC;FireDACADSDriver;DatasnapConnectorsFreePascal;FireDACMSSQLDriver;inetdb;emsedge;FireDACIBDriver;dbexpress;IndyCore;dsnap;emsclient;DataSnapCommon;FireDACCommon;RESTBackendComponents;DataSnapConnectors;soapserver;bindengine;CloudService;FireDACOracleDriver;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;DataSnapClient;inet;IndySystem;FireDACDb2Driver;FireDACInfxDriver;FireDAC;emshosting;FireDACSqliteDriver;FireDACPgDriver;FireDACASADriver;FireDACTDataDriver;soaprtl;DbxCommonDriver;DataSnapServer;xmlrtl;soapmidas;DataSnapNativeClient;rtl;emsserverresource;DbxClientDriver;CustomIPTransport;bindcomp;dbxcds;FireDACODBCDriver;DataSnapIndy10ServerTransport;dsnapxml;dbrtl;FireDACMongoDBDriver;IndyProtocols;$(DCC_UsePackage)</DCC_UsePackage>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;TVidGrab;DBXDb2Driver;DBXInterBaseDriver;vclactnband;ACBr_TEFD;vclFireDAC;emsclientfiredac;IWBootstrapD103;tethering;svnui;DataSnapFireDAC;TBGConnection;FireDACADSDriver;DBXMSSQLDriver;DUPCORE;ACBr_MDFeDamdfeRL;DatasnapConnectorsFreePascal;FireDACMSSQLDriver;vcltouch;ACBr_NFe;ACBrDFeReportRL;vcldb;bindcompfmx;svn;DBXOracleDriver;inetdb;ACBr_NFeDanfeESCPOS;ACBr_Diversos;ACBr_TXTComum;emsedge;fmx;FireDACIBDriver;fmxdae;ACBr_Ponto;FireDACDBXDriver;dbexpress;IndyCore;vclx;dsnap;emsclient;DataSnapCommon;FireDACCommon;ACBr_SATExtratoRL;ACBr_PCNComum;RESTBackendComponents;DataSnapConnectors;ACBR_DeSTDA;VCLRESTComponents;soapserver;ACBr_SAT;TBGQuery;vclie;bindengine;DBXMySQLDriver;CloudService;FireDACOracleDriver;FireDACMySQLDriver;DBXFirebirdDriver;ACBr_PAF;ACBr_Sintegra;FireDACCommonODBC;FireDACCommonDriver;ACBr_GNRE;DataSnapClient;inet;IndyIPCommon;bindcompdbx;ACBr_TCP;ACBr_CTeDacteRL;vcl;IndyIPServer;DBXSybaseASEDriver;ACBr_CTe;TBGWebCharts;ACBr_NFeDanfeRL;IndySystem;FireDACDb2Driver;dsnapcon;TBGFiredacDriver;ACBr_synapse;FireDACMSAccDriver;fmxFireDAC;FireDACInfxDriver;vclimg;ACBr_SPEDImportar;FireDAC;ACBr_SPED;ACBr_MDFe;emshosting;ACBr_Comum;ACBr_BoletoRL;FireDACSqliteDriver;FireDACPgDriver;ACBr_LFD;FireDACASADriver;ACBr_GNREGuiaRL;DBXOdbcDriver;FireDACTDataDriver;MaterialDesign;Player;soaprtl;DbxCommonDriver;ACBr_NFSeDanfseRL;TBGDBExpressDriver;DataSnapServer;xmlrtl;soapmidas;DataSnapNativeClient;fmxobj;vclwinx;FireDACDSDriver;rtl;emsserverresource;DbxClientDriver;ACBr_OpenSSL;DBXSybaseASADriver;ACBr_DFeComum;CustomIPTransport;vcldsnap;DCEF_DX10;ACBr_Convenio115;bindcomp;appanalytics;ACBr_Serial;DBXInformixDriver;IndyIPClient;frce;bindcompvcl;GridSystem;ACBr_BlocoX;dbxcds;VclSmp;ACBr_NFCeECFVirtual;adortl;FireDACODBCDriver;Intraweb_15_D10_3;DataSnapIndy10ServerTransport;ACBr_Boleto;dsnapxml;DataSnapProviderClient;dbrtl;inetdbxpress;FireDACMongoDBDriver;ACBr_SEF2;Windows;IndyProtocols;ACBr_NFSe;ACBr_MTER;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -134,6 +126,7 @@
         <DCC_ExeOutput>.\</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>(None)</Manifest_File>
+        <DCC_UnitSearchPath>..\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -166,9 +159,7 @@
                     <Source Name="MainSource">Project1.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\Win64\TBGConnection.bpl">(untitled)</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclDataSnapNativeServer260.bpl">Embarcadero DBExpress DataSnap Native Server Components</Excluded_Packages>
-                    <Excluded_Packages Name="D:\Projetos\Componentes\ACBr\Lib\Delphi\LibD26\ACBr_Integrador.bpl">ACBr - Integrador - (http://www.projetoacbr.com.br/)</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dclcxPivotGridOLAPRS26.bpl">ExpressPivotGrid OLAP by Developer Express Inc.</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
@@ -1025,7 +1016,6 @@
             <Platforms>
                 <Platform value="Android">False</Platform>
                 <Platform value="Android64">False</Platform>
-                <Platform value="Linux64">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
