@@ -20,14 +20,14 @@ begin
   THorse.Get('/ping',
     procedure(Req: THorseRequest; Res: THorseResponse; Next: TProc)
     var
-      DataSet: TClientDataSet;
+      LDataSet: TClientDataSet;
     begin
-      DataSet := TClientDataSet.Create(nil);
+      LDataSet := TClientDataSet.Create(nil);
       try
-        DataSet.LoadFromFile('items.xml');
-        Res.Send<TJsonArray>(DataSet.ToJsonArray);
+        LDataSet.LoadFromFile('items.xml');
+        Res.Send<TJSONArray>(LDataSet.ToJsonArray);
       finally
-        DataSet.Free;
+        LDataSet.Free;
       end;
     end);
 
