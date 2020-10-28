@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject>
-	<Transactions>
-    <Transaction>2020/04/22 10:10:23.000.790,=rtl.dcp</Transaction>
-    <Transaction>2020/04/22 10:10:48.000.359,C:\Users\thuli\Documents\Embarcadero\Studio\Projects\Package1.dproj=D:\Projetos\Componentes\horse-paginate\HorsePaginate.dproj</Transaction>
-    <Transaction>2020/04/22 10:10:51.000.698,=D:\Projetos\Componentes\horse-paginate\Unit2.pas</Transaction>
-    <Transaction>2020/04/22 10:11:03.000.004,D:\Projetos\Componentes\horse-paginate\Unit2.pas=D:\Projetos\Componentes\horse-paginate\src\Horse.Paginate.pas</Transaction>
-  </Transactions>
-</BorlandProject>
