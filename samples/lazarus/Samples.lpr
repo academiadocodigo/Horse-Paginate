@@ -10,9 +10,9 @@ uses
 
 procedure GetPing(Req: THorseRequest; Res: THorseResponse; Next: TNextProc);
 var
-  LDataSet: {$IF DEFINED(FPC)}TMemDataset{$ELSE}TClientDataSet{$ENDIF};
+  LDataSet: TMemDataset;
 begin
-  LDataSet := {$IF DEFINED(FPC)}TMemDataset.Create(nil){$ELSE}TClientDataSet.Create(nil){$ENDIF};
+  LDataSet := TMemDataset.Create(nil);
   try
     LDataSet.LoadFromFile('items.xml');
     Res.Send<TJSONArray>(LDataSet.ToJSONArray());
