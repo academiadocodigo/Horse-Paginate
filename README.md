@@ -12,6 +12,11 @@ limit=X (Esse parametro define o limite de registros da paginação)
 
 page=X (Esse parametro informa qual a pagina da paginação deve ser retornada)
 
+
+## Installation
+``` boss install github.com/bittencourtthulio/Horse-Paginate ```
+
+
 Exemplo
 
 www.seusite.com:9000/ping?limit=10&page=5
