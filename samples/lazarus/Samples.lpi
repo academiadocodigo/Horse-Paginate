@@ -40,7 +40,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\src;modules\horse\src;modules\jhonson\src;modules\dataset-serialize\src\core;modules\dataset-serialize\src\helpers;modules\dataset-serialize\src\providers;modules\dataset-serialize\src\singletons;modules\dataset-serialize\src\types"/>
+      <OtherUnitFiles Value="..\..\src;modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\horse\src;modules\jhonson\src"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>

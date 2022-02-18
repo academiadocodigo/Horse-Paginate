@@ -1,17 +1,17 @@
 unit Horse.Paginate;
 
 {$IF DEFINED(FPC)}
-{$MODE DELPHI}{$H+}
+  {$MODE DELPHI}{$H+}
 {$ENDIF}
 
 interface
 
 uses
-  {$IF DEFINED(FPC)}
-    SysUtils, fpjson, HTTPDefs,
-  {$ELSE}
-    System.SysUtils, System.Classes, System.JSON, Web.HTTPApp,
-  {$ENDIF}
+{$IF DEFINED(FPC)}
+  SysUtils, fpjson, HTTPDefs,
+{$ELSE}
+  System.SysUtils, System.Classes, System.JSON, Web.HTTPApp,
+{$ENDIF}
   Horse;
 
 procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: {$IF DEFINED(FPC)}TNextProc{$ELSE}TProc{$ENDIF});
@@ -20,11 +20,11 @@ function Paginate: THorseCallback;
 implementation
 
 uses
-  {$IF DEFINED(FPC)}
-    Generics.Collections;
-  {$ELSE}
-    System.Generics.Collections;
-  {$ENDIF}
+{$IF DEFINED(FPC)}
+  Generics.Collections;
+{$ELSE}
+  System.Generics.Collections;
+{$ENDIF}
 
 function Paginate: THorseCallback;
 begin
@@ -50,14 +50,13 @@ begin
         LLimit := '25';
       if not Req.Query.TryGetValue('page', LPage) then
         LPage := '1';
-      LWebResponse := THorseHackResponse(Res).GetWebResponse;
-      LContent := THorseHackResponse(Res).GetContent;
+      LWebResponse := Res.RawWebResponse;
+      LContent := Res.Content;
       if Assigned(LContent) and LContent.InheritsFrom({$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}) then
       begin
         try
           LJsonArray := {$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}(LContent) as TJSONArray;
-          LPages := Trunc(LJsonArray.Count / LLimit.ToInteger) +
-                    Byte((LJsonArray.Count Mod  LLimit.ToInteger) <> 0); // Se tiver resto na divisão então soma um no total de paginas
+          LPages := Trunc(LJsonArray.Count / LLimit.ToInteger) + Byte((LJsonArray.Count Mod  LLimit.ToInteger) <> 0);
 
           LNewJsonArray := TJsonArray.Create;
           for i := (LLimit.ToInteger * (LPage.ToInteger - 1)) to ((LLimit.ToInteger * LPage.ToInteger)) - 1 do
