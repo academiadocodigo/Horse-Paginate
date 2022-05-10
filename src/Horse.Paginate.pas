@@ -44,7 +44,7 @@ begin
   try
     Next;
   finally
-    if Req.Headers['X-Paginate'] = 'true' then
+    if Req.Headers.ContainsKey('X-Paginate') and (LowerCase(Req.Headers['X-Paginate']) = 'true') then
     begin
       if not Req.Query.TryGetValue('limit', LLimit) then
         LLimit := '25';
