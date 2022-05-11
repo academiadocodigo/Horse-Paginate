@@ -73,7 +73,7 @@ begin
           FreeAndNil(LContent);
           LWebResponse.Content := LJsonObjectResponse.{$IF DEFINED(FPC)}ToString{$ELSE}ToJSON{$ENDIF};
           Res.Send<{$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}>(LJsonObjectResponse);
-          LWebResponse.ContentType := 'application/json';
+          LWebResponse.ContentType := Res.RawWebResponse.ContentType;
         except
         end;
       end;
