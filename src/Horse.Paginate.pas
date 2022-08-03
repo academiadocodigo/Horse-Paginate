@@ -34,6 +34,7 @@ end;
 procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: {$IF DEFINED(FPC)}TNextProc{$ELSE}TProc{$ENDIF});
 var
   LWebResponse: {$IF DEFINED(FPC)}TResponse{$ELSE}TWebResponse{$ENDIF};
+  LJsonValueResponse: TJSONValue;
   LContent: TObject;
   LJsonArray, LNewJsonArray: TJSONArray;
   LJsonObjectResponse: TJSONObject;
@@ -48,6 +49,7 @@ begin
     begin
       if not Req.Query.TryGetValue('limit', LLimit) then
         LLimit := '25';
+
       if not Req.Query.TryGetValue('page', LPage) then
         LPage := '1';
       LWebResponse := Res.RawWebResponse;
@@ -64,15 +66,25 @@ begin
             if i < LJsonArray.Count then
               LNewJsonArray.{$IF DEFINED(FPC)}Add{$ELSE}AddElement{$ENDIF}(LJsonArray.Items[i].Clone as {$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF});
           end;
-          LJsonObjectResponse := TJsonObject.Create;
-          LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('docs', LNewJsonArray);
-          LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('total', {$IF DEFINED(FPC)}LJsonArray.Count{$ELSE}TJSONNumber.Create(LJsonArray.Count){$ENDIF});
-          LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('limit', {$IF DEFINED(FPC)}LLimit.ToInteger{$ELSE}TJSONNumber.Create(LLimit.ToInteger){$ENDIF});
-          LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('page', {$IF DEFINED(FPC)}LPage.ToInteger{$ELSE}TJSONNumber.Create(LPage.ToInteger){$ENDIF});
-          LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('pages', {$IF DEFINED(FPC)}LPages{$ELSE}TJSONNumber.Create(LPages){$ENDIF});
-          FreeAndNil(LContent);
-          LWebResponse.Content := LJsonObjectResponse.{$IF DEFINED(FPC)}ToString{$ELSE}ToJSON{$ENDIF};
-          Res.Send<{$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}>(LJsonObjectResponse);
+
+          if Req.Headers.ContainsKey('include-summary')
+            and (LowerCase(Req.Headers['include-summary']) = 'true') then
+          begin
+            LJsonObjectResponse := TJsonObject.Create;
+            LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('docs', LNewJsonArray);
+            LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('total', {$IF DEFINED(FPC)}LJsonArray.Count{$ELSE}TJSONNumber.Create(LJsonArray.Count){$ENDIF});
+            LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('limit', {$IF DEFINED(FPC)}LLimit.ToInteger{$ELSE}TJSONNumber.Create(LLimit.ToInteger){$ENDIF});
+            LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('page', {$IF DEFINED(FPC)}LPage.ToInteger{$ELSE}TJSONNumber.Create(LPage.ToInteger){$ENDIF});
+            LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('pages', {$IF DEFINED(FPC)}LPages{$ELSE}TJSONNumber.Create(LPages){$ENDIF});
+            FreeAndNil(LContent);
+            LJsonValueResponse := LJsonObjectResponse;
+          end
+          else
+            LJsonValueResponse := LNewJsonArray;
+
+          LWebResponse.Content := LJsonValueResponse.{$IF DEFINED(FPC)}ToString{$ELSE}ToJSON{$ENDIF};
+
+          Res.Send<{$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}>(LJsonValueResponse);
           LWebResponse.ContentType := Res.RawWebResponse.ContentType;
         except
         end;
