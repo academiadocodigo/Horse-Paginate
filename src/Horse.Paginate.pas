@@ -24,7 +24,7 @@ const
 procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: {$IF DEFINED(FPC)}TNextProc{$ELSE}TProc{$ENDIF});
 
 function Paginate: THorseCallback; overload;
-function Paginate(APaginateOptions: THorsePaginateOptionSet = HORSE_PAGINATE_OPTION_ALL): THorseCallback; overload;
+function Paginate(APaginateOptions: THorsePaginateOptionSet): THorseCallback; overload;
 
 implementation
 
