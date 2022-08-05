@@ -14,8 +14,17 @@ uses
 {$ENDIF}
   Horse;
 
+type
+  THorsePaginateOption = (gpoReturnSummary);
+  THorsePaginateOptionSet = set of THorsePaginateOption;
+
+const
+  HORSE_PAGINATE_OPTION_ALL = [gpoReturnSummary];
+
 procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: {$IF DEFINED(FPC)}TNextProc{$ELSE}TProc{$ENDIF});
-function Paginate: THorseCallback;
+
+function Paginate(APaginateOptions: THorsePaginateOptionSet = HORSE_PAGINATE_OPTION_ALL): THorseCallback; overload;
+function Paginate: THorseCallback; overload;
 
 implementation
 
@@ -26,8 +35,17 @@ uses
   System.Generics.Collections;
 {$ENDIF}
 
-function Paginate: THorseCallback;
+var
+  PaginateOptionSet: THorsePaginateOptionSet;
+
+function Paginate: THorseCallback; overload;
 begin
+  Result := Paginate(HORSE_PAGINATE_OPTION_ALL);
+end;
+
+function Paginate(APaginateOptions: THorsePaginateOptionSet): THorseCallback;
+begin
+  PaginateOptionSet := APaginateOptions;
   Result := Middleware;
 end;
 
@@ -67,8 +85,8 @@ begin
               LNewJsonArray.{$IF DEFINED(FPC)}Add{$ELSE}AddElement{$ENDIF}(LJsonArray.Items[i].Clone as {$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF});
           end;
 
-          if Req.Headers.ContainsKey('include-summary')
-            and (LowerCase(Req.Headers['include-summary']) = 'true') then
+          if (gpoReturnSummary in PaginateOptionSet) or
+            Req.Headers.ContainsKey('include-summary') and (LowerCase(Req.Headers['include-summary']) = 'true') then
           begin
             LJsonObjectResponse := TJsonObject.Create;
             LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('docs', LNewJsonArray);
