@@ -15,13 +15,11 @@ uses
   Horse;
 
 type
-  THorsePaginateOption = (gpoIncludeSummary);
+  THorsePaginateOption = (gpoDoNotIncludeSummary);
   THorsePaginateOptionSet = set of THorsePaginateOption;
 
 const
-  HORSE_PAGINATE_OPTION_ALL = [gpoIncludeSummary];
-
-procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: {$IF DEFINED(FPC)}TNextProc{$ELSE}TProc{$ENDIF});
+  HORSE_PAGINATE_OPTION_ALL = [gpoDoNotIncludeSummary];
 
 function Paginate: THorseCallback; overload;
 function Paginate(APaginateOptions: THorsePaginateOptionSet): THorseCallback; overload;
@@ -38,21 +36,10 @@ uses
 var
   PaginateOptionSet: THorsePaginateOptionSet;
 
-function Paginate: THorseCallback; overload;
-begin
-  Result := Paginate(HORSE_PAGINATE_OPTION_ALL);
-end;
-
-function Paginate(APaginateOptions: THorsePaginateOptionSet): THorseCallback;
-begin
-  PaginateOptionSet := APaginateOptions;
-  Result := Middleware;
-end;
-
 procedure Middleware(Req: THorseRequest; Res: THorseResponse; Next: {$IF DEFINED(FPC)}TNextProc{$ELSE}TProc{$ENDIF});
 var
   LWebResponse: {$IF DEFINED(FPC)}TResponse{$ELSE}TWebResponse{$ENDIF};
-  LJsonValueResponse: TJSONValue;
+  LJsonValueResponse: {$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF};
   LContent: TObject;
   LJsonArray, LNewJsonArray: TJSONArray;
   LJsonObjectResponse: TJSONObject;
@@ -67,7 +54,6 @@ begin
     begin
       if not Req.Query.TryGetValue('limit', LLimit) then
         LLimit := '25';
-
       if not Req.Query.TryGetValue('page', LPage) then
         LPage := '1';
       LWebResponse := Res.RawWebResponse;
@@ -79,13 +65,15 @@ begin
           LPages := Trunc(LJsonArray.Count / LLimit.ToInteger) + Byte((LJsonArray.Count Mod  LLimit.ToInteger) <> 0);
 
           LNewJsonArray := TJsonArray.Create;
-          for i := (LLimit.ToInteger * (LPage.ToInteger - 1)) to ((LLimit.ToInteger * LPage.ToInteger)) - 1 do
+          for I := (LLimit.ToInteger * (LPage.ToInteger - 1)) to ((LLimit.ToInteger * LPage.ToInteger)) - 1 do
           begin
-            if i < LJsonArray.Count then
-              LNewJsonArray.{$IF DEFINED(FPC)}Add{$ELSE}AddElement{$ENDIF}(LJsonArray.Items[i].Clone as {$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF});
+            if I < LJsonArray.Count then
+              LNewJsonArray.{$IF DEFINED(FPC)}Add{$ELSE}AddElement{$ENDIF}(LJsonArray.Items[I].Clone as {$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF});
           end;
 
-          if (gpoIncludeSummary in PaginateOptionSet) then
+          if (gpoDoNotIncludeSummary in PaginateOptionSet) then
+            LJsonValueResponse := LNewJsonArray
+          else
           begin
             LJsonObjectResponse := TJsonObject.Create;
             LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('docs', LNewJsonArray);
@@ -95,12 +83,9 @@ begin
             LJsonObjectResponse.{$IF DEFINED(FPC)}Add{$ELSE}AddPair{$ENDIF}('pages', {$IF DEFINED(FPC)}LPages{$ELSE}TJSONNumber.Create(LPages){$ENDIF});
             FreeAndNil(LContent);
             LJsonValueResponse := LJsonObjectResponse;
-          end
-          else
-            LJsonValueResponse := LNewJsonArray;
+          end;
 
           LWebResponse.Content := LJsonValueResponse.{$IF DEFINED(FPC)}ToString{$ELSE}ToJSON{$ENDIF};
-
           Res.Send<{$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}>(LJsonValueResponse);
           LWebResponse.ContentType := Res.RawWebResponse.ContentType;
         except
@@ -108,6 +93,17 @@ begin
       end;
     end;
   end;
+end;
+
+function Paginate: THorseCallback; overload;
+begin
+  Result := Paginate(HORSE_PAGINATE_OPTION_ALL);
+end;
+
+function Paginate(APaginateOptions: THorsePaginateOptionSet): THorseCallback;
+begin
+  PaginateOptionSet := APaginateOptions;
+  Result := Middleware;
 end;
 
 end.

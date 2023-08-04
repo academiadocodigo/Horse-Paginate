@@ -3,11 +3,11 @@
 	"description": "",
 	"version": "1.0.0",
 	"homepage": "",
-	"mainsrc": "./",
+	"mainsrc": "./src",
 	"projects": [],
 	"dependencies": {
-		"github.com/hashload/horse": "^3.0.0",
-		"github.com/hashload/jhonson": "^1.1.4",
-		"github.com/viniciussanchez/dataset-serialize": "^v2.3.8"
+		"github.com/hashload/horse": "^3.1.3",
+		"github.com/hashload/jhonson": "^1.1.6",
+		"github.com/viniciussanchez/dataset-serialize": "^v2.4.9"
 	}
 }
