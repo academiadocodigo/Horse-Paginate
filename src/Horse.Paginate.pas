@@ -85,7 +85,8 @@ begin
             LJsonValueResponse := LJsonObjectResponse;
           end;
 
-          LWebResponse.Content := LJsonValueResponse.{$IF DEFINED(FPC)}ToString{$ELSE}ToJSON{$ENDIF};
+          //LWebResponse.Content := LJsonValueResponse.{$IF DEFINED(FPC)}ToString{$ELSE}ToJSON{$ENDIF};
+          LWebResponse.Content := LJsonValueResponse.{$IF DEFINED(FPC)}AsJson{$ELSE}ToJSON{$ENDIF};
           Res.Send<{$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}>(LJsonValueResponse);
           LWebResponse.ContentType := Res.RawWebResponse.ContentType;
         except
