@@ -98,7 +98,7 @@ end;
 
 function Paginate: THorseCallback; overload;
 begin
-  Result := Paginate(HORSE_PAGINATE_OPTION_ALL);
+  Result := Paginate([]);
 end;
 
 function Paginate(APaginateOptions: THorsePaginateOptionSet): THorseCallback;
