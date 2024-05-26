@@ -58,6 +58,19 @@ begin
         LPage := '1';
       LWebResponse := Res.RawWebResponse;
       LContent := Res.Content;
+
+      if (Length(LWebResponse.Content) > 0 ) and (LWebResponse.ContentType.Contains('application/json')) then
+      begin
+        try
+        {$IF DEFINED(FPC)}
+          Res.Content(GetJSON(LWebResponse.Content));
+        {$ELSE}
+          Res.Content(TJSONValue.ParseJSONValue(LWebResponse.Content));
+        {$ENDIF}
+        except
+        end;
+      end;
+
       if Assigned(LContent) and LContent.InheritsFrom({$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}) then
       begin
         try
