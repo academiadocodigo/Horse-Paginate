@@ -56,7 +56,20 @@ begin
         LLimit := '25';
       if not Req.Query.TryGetValue('page', LPage) then
         LPage := '1';
+
       LWebResponse := Res.RawWebResponse;
+      if (Length(LWebResponse.Content) > 0 ) and (LWebResponse.ContentType.Contains('application/json')) then
+      begin
+        try
+        {$IF DEFINED(FPC)}
+          Res.Content(GetJSON(LWebResponse.Content));
+        {$ELSE}
+          Res.Content(TJSONValue.ParseJSONValue(LWebResponse.Content));
+        {$ENDIF}
+        except
+        end;
+      end;
+
       LContent := Res.Content;
       if Assigned(LContent) and LContent.InheritsFrom({$IF DEFINED(FPC)}TJSONData{$ELSE}TJSONValue{$ENDIF}) then
       begin
